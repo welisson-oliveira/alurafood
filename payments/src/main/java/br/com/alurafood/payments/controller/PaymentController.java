@@ -35,9 +35,9 @@ public class PaymentController {
     }
 
     @PostMapping
-    public ResponseEntity<PaymentDto> register(@RequestBody @Valid final PaymentDto dto, final UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<PaymentDto> createPayment(@RequestBody @Valid final PaymentDto dto, final UriComponentsBuilder uriBuilder) {
         final PaymentDto payment = this.service.createPayment(dto);
-        final URI address = uriBuilder.path("/pagamentos/{id}").buildAndExpand(payment.getId()).toUri();
+        final URI address = uriBuilder.path("/payment/{id}").buildAndExpand(payment.getId()).toUri();
 
         return ResponseEntity.created(address).body(payment);
     }
@@ -60,7 +60,7 @@ public class PaymentController {
         this.service.confirmOrder(id);
     }
 
-    public void authorizedPaymentPendingIntegration(final Long id, final Exception e) {
+    private void authorizedPaymentPendingIntegration(final Long id, final Exception e) {
         this.service.authorizedPaymentPendingIntegration(id);
     }
 }

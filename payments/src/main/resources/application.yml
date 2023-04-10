@@ -4,6 +4,11 @@ spring:
     active: development
   application:
     name: payment
+  #  rabbitmq:
+  #    host: localhost
+  #    port: 5672
+  #    username: guest
+  #    password: guest
 
   # Database
   datasource:
@@ -45,3 +50,5 @@ resilience4j:
         slidingWindowSize: 3
         minimumNumberOfCalls: 2
         waitDurationInOpenState: 50s
+
+
