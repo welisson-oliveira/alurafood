@@ -1,13 +1,25 @@
 package br.com.alurafood.order.config;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.FanoutExchange;
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@RequiredArgsConstructor
 public class AmqpConfig {
+
+    private final AmqpAdmin amqpAdmin;
+
     @Bean
     public Jackson2JsonMessageConverter messageConverter() {
         return new Jackson2JsonMessageConverter();
@@ -19,4 +31,37 @@ public class AmqpConfig {
         rabbitTemplate.setMessageConverter(messageConverter);
         return rabbitTemplate;
     }
+
+    @Bean
+    public ApplicationListener<ApplicationReadyEvent> initAdmin(final RabbitAdmin rabbitAdmin) {
+        return event -> rabbitAdmin.initialize();
+    }
+
+    @Bean
+    public FanoutExchange fanoutExchange() {
+        return new FanoutExchange("payment.ex");
+    }
+
+    @Bean
+    public Queue orderDetailQueue() {
+        return new Queue("payment.order-detail", true, false, false);
+    }
+
+    @Bean
+    public Queue evaluationQueue() {
+        return new Queue("payment.order-evaluation", true, false, false);
+    }
+
+    @Bean
+    public Binding bindPaymentOrder(final FanoutExchange fanoutExchange) {
+        final Queue queue = this.orderDetailQueue();
+        return new Binding(queue.getName(), Binding.DestinationType.QUEUE, fanoutExchange.getName(), queue.getName(), null);
+    }
+
+    @Bean
+    public Binding bindEvaluationOrder(final FanoutExchange fanoutExchange) {
+        final Queue queue = this.evaluationQueue();
+        return new Binding(queue.getName(), Binding.DestinationType.QUEUE, fanoutExchange.getName(), queue.getName(), null);
+    }
+
 }

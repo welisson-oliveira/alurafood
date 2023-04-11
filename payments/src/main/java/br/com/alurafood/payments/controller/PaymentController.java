@@ -42,6 +42,14 @@ public class PaymentController {
         return ResponseEntity.created(address).body(payment);
     }
 
+    @PostMapping("/fanout")
+    public ResponseEntity<PaymentDto> createPaymentFanout(@RequestBody @Valid final PaymentDto dto, final UriComponentsBuilder uriBuilder) {
+        final PaymentDto payment = this.service.createPaymentFanout(dto);
+        final URI address = uriBuilder.path("/payment/{id}").buildAndExpand(payment.getId()).toUri();
+
+        return ResponseEntity.created(address).body(payment);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<PaymentDto> update(@PathVariable @NotNull final Long id, @RequestBody @Valid final PaymentDto dto) {
         final PaymentDto updated = this.service.updatePayment(id, dto);
@@ -60,6 +68,7 @@ public class PaymentController {
         this.service.confirmOrder(id);
     }
 
+    @SuppressWarnings("unused")
     private void authorizedPaymentPendingIntegration(final Long id, final Exception e) {
         this.service.authorizedPaymentPendingIntegration(id);
     }

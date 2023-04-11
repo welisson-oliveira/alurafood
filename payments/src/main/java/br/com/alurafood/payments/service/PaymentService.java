@@ -48,8 +48,20 @@ public class PaymentService {
         payment.setStatus(Status.CREATED);
         this.repository.save(payment);
 
-//        this.rabbitTemplate.convertAndSend("payment.concluded", new Message(("Criei um pagamento com o id " + payment.getId()).getBytes()));
+        /** this.rabbitTemplate.convertAndSend("payment.concluded", new Message(("Criei um pagamento com o id " + payment.getId()).getBytes())); */
         this.rabbitTemplate.convertAndSend("payment.concluded", payment);
+
+        return this.modelMapper.map(payment, PaymentDto.class);
+    }
+
+    @Transactional
+    public PaymentDto createPaymentFanout(final PaymentDto dto) {
+
+        final Payment payment = this.modelMapper.map(dto, Payment.class);
+        payment.setStatus(Status.CREATED);
+        this.repository.save(payment);
+
+        this.rabbitTemplate.convertAndSend("payment.ex", "", payment);
 
         return this.modelMapper.map(payment, PaymentDto.class);
     }

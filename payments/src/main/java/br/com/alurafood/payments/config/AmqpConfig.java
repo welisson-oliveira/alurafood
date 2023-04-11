@@ -1,5 +1,6 @@
 package br.com.alurafood.payments.config;
 
+import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -17,6 +18,11 @@ public class AmqpConfig {
     @Bean
     public Queue createQueue() {
         return QueueBuilder.nonDurable("payment.concluded").build();
+    }
+
+    @Bean
+    public FanoutExchange fanoutExchange() {
+        return new FanoutExchange("payment.ex");
     }
 
     @Bean
