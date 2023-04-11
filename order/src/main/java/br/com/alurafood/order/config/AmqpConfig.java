@@ -1,10 +1,7 @@
 package br.com.alurafood.order.config;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.core.AmqpAdmin;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.FanoutExchange;
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -43,13 +40,24 @@ public class AmqpConfig {
     }
 
     @Bean
+    public FanoutExchange deadLetterExchange() {
+        return new FanoutExchange("payment.dlx");
+    }
+
+    @Bean
     public Queue orderDetailQueue() {
         return new Queue("payment.order-detail", true, false, false);
     }
 
     @Bean
     public Queue evaluationQueue() {
-        return new Queue("payment.order-evaluation", true, false, false);
+        return QueueBuilder.durable("payment.order-evaluation")
+                .deadLetterExchange("payment.dlx").build();
+    }
+
+    @Bean
+    public Queue evaluationDlqQueue() {
+        return new Queue("payment.order-evaluation-dlq", true, false, false);
     }
 
     @Bean
@@ -59,9 +67,15 @@ public class AmqpConfig {
     }
 
     @Bean
-    public Binding bindEvaluationOrder(final FanoutExchange fanoutExchange) {
+    public Binding bindEvaluationOrder() {
         final Queue queue = this.evaluationQueue();
-        return new Binding(queue.getName(), Binding.DestinationType.QUEUE, fanoutExchange.getName(), queue.getName(), null);
+        return new Binding(queue.getName(), Binding.DestinationType.QUEUE, this.fanoutExchange().getName(), queue.getName(), null);
+    }
+
+    @Bean
+    public Binding bindEvaluationOrderDlq() {
+        final Queue queue = this.evaluationDlqQueue();
+        return new Binding(queue.getName(), Binding.DestinationType.QUEUE, this.deadLetterExchange().getName(), queue.getName(), null);
     }
 
 }

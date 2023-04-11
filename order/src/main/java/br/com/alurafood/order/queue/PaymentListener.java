@@ -1,7 +1,7 @@
 package br.com.alurafood.order.queue;
 
 import br.com.alurafood.order.dto.PaymentDto;
-import br.com.alurafood.order.exception.ProcessError;
+import br.com.alurafood.order.exception.ProcessingError;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -49,7 +49,7 @@ public class PaymentListener {
         PaymentListener.log.info(paymentDto.getNumber());
 
         if (paymentDto.getNumber().equals("0000")) {
-            throw new ProcessError("não consegui processar");
+            throw new ProcessingError("não consegui processar");
         }
 
         final String message = """
