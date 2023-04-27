@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq-clusterip # Sets service name
+  labels:
+    app: rabbitmq-clusterip # Labels and Selectors
+spec:
+  type: ClusterIP # Sets service type
+  ports:
+    - port: 5672 # Sets port to run the postgres application
+  selector:
+    app: rabbitmq-pod

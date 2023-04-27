@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-pod
+  labels:
+    app: payment-pod
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: payment-pod
+  template:
+    metadata:
+      labels:
+        app: payment-pod
+    spec:
+      containers:
+        - name: payment-pod-container
+          image: docker.io/library/payment-pod
+          #      image: docker.io/library/openjdk
+          ports:
+          #            - containerPort: 8080
+          imagePullPolicy: "IfNotPresent"

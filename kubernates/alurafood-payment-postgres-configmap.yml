@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alurafood-payment-postgres-configmap
+  labels:
+    app: alurafood-payment-postgres-configmap
+data:
+  POSTGRES_DB: alurafood-payment
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: mysecretpassword

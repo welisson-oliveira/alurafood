@@ -5,7 +5,7 @@ spring:
   application:
     name: order
   rabbitmq:
-    host: localhost
+    host: rabbitmq-clusterip
     port: 5672
     username: guest
     password: guest
@@ -21,7 +21,7 @@ spring:
   # Database
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/alurafood-order
+    url: jdbc:postgresql://postgres-order-clusterip:5432/alurafood-order
     username: postgres
     password: mysecretpassword
   # JPA properties
@@ -47,6 +47,6 @@ server:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://discovery-clusterip:8761/eureka
   instance:
     instance-id: ${spring.application.name}:${random.int}

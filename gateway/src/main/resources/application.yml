@@ -14,4 +14,7 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://discovery-clusterip:8761/eureka
+  # é utilizado para subir mais de uma instancia
+  instance:
+    instance-id: ${spring.application.name}:${random.int}

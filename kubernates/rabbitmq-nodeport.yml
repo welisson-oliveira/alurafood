@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq-nodeport # Sets service name
+  labels:
+    app: rabbitmq-nodeport # Labels and Selectors
+spec:
+  type: NodePort # Sets service type
+  ports:
+    - port: 15672 # Sets port to run the postgres application
+      nodePort: 31005
+  selector:
+    app: rabbitmq-pod

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-order-deployment  # Sets Deployment name
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alurafood-order-postgres
+  template:
+    metadata:
+      labels:
+        app: alurafood-order-postgres
+    spec:
+      containers:
+        - name: postgres-order
+          image: postgres:10.1 # Sets Image
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432  # Exposes container port
+          envFrom:
+            - configMapRef:
+                name: alurafood-order-postgres-configmap
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgredb-order
+      volumes:
+        - name: postgredb-order
+          persistentVolumeClaim:
+            claimName: alurafood-order-postgres-pv-claim

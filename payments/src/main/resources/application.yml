@@ -4,16 +4,17 @@ spring:
     active: development
   application:
     name: payment
-  #  rabbitmq:
-  #    host: localhost
-  #    port: 5672
-  #    username: guest
-  #    password: guest
+  #  nao é preciso declarar as propriedades do rabbit quando se utiliza as configs default
+  rabbitmq:
+    host: rabbitmq-clusterip
+    port: 5672
+    username: guest
+    password: guest
 
   # Database
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/alurafood-payment
+    url: jdbc:postgresql://postgres-payment-clusterip:5432/alurafood-payment
     username: postgres
     password: mysecretpassword
   # JPA properties
@@ -39,7 +40,7 @@ server:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://discovery-clusterip:8761/eureka
   instance:
     instance-id: ${spring.application.name}:${random.int}
 

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-pod
+  labels:
+    app: order-pod
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: order-pod
+  template:
+    metadata:
+      labels:
+        app: order-pod
+    spec:
+      containers:
+        - name: order-pod-container
+          image: docker.io/library/order-pod
+          #      image: docker.io/library/openjdk
+          ports:
+          #            - containerPort: 8080
+          imagePullPolicy: "IfNotPresent"

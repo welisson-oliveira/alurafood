@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-payment-deployment  # Sets Deployment name
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alurafood-payment-postgres
+  template:
+    metadata:
+      labels:
+        app: alurafood-payment-postgres
+    spec:
+      containers:
+        - name: postgres-payment
+          image: postgres:10.1 # Sets Image
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432  # Exposes container port
+          envFrom:
+            - configMapRef:
+                name: alurafood-payment-postgres-configmap
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgredb-payment
+      volumes:
+        - name: postgredb-payment
+          persistentVolumeClaim:
+            claimName: alurafood-payment-postgres-pv-claim

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-order-clusterip # Sets service name
+  labels:
+    app: postgres-order-clusterip # Labels and Selectors
+spec:
+  type: ClusterIP # Sets service type
+  ports:
+    - port: 5432 # Sets port to run the postgres application
+  selector:
+    app: alurafood-order-postgres

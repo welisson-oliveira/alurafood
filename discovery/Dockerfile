@@ -1,6 +1,4 @@
 FROM openjdk:17-alpine
-RUN apk add --update curl && \
-    rm -rf /var/cache/apk/*
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring
 ARG JAR_FILE=target/*.jar

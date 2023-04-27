@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: gateway-pod
+  labels:
+    app: gateway-pod
+spec:
+  containers:
+    - name: gateway-pod-container
+      image: docker.io/library/gateway-pod
+      #      image: docker.io/library/openjdk
+      ports:
+        - containerPort: 8080
+      imagePullPolicy: Never
