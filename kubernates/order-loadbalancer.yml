@@ -3,12 +3,14 @@ kind: Service
 metadata:
   name: order-loadbalancer
   labels:
-    app: nginx
+    app: order-loadbalancer
   annotations:
     oci.oraclecloud.com/load-balancer-type: "lb"
 spec:
   type: LoadBalancer
   ports:
-    - port: 80
+    - port: 8080
+      nodePort: 30333
+  externalTrafficPolicy: Local
   selector:
     app: order-pod

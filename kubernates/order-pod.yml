@@ -17,7 +17,6 @@ spec:
       containers:
         - name: order-pod-container
           image: docker.io/library/order-pod
-          #      image: docker.io/library/openjdk
           ports:
-          #            - containerPort: 8080
+            - containerPort: 8080
           imagePullPolicy: "IfNotPresent"

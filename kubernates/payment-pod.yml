@@ -5,7 +5,7 @@ metadata:
   labels:
     app: payment-pod
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: payment-pod
@@ -19,5 +19,5 @@ spec:
           image: docker.io/library/payment-pod
           #      image: docker.io/library/openjdk
           ports:
-          #            - containerPort: 8080
+            - containerPort: 8080
           imagePullPolicy: "IfNotPresent"

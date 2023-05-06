@@ -4,6 +4,7 @@ import br.com.alurafood.order.dto.OrderDto;
 import br.com.alurafood.order.dto.StatusDto;
 import br.com.alurafood.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +17,13 @@ import java.net.URI;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/order")
+@Slf4j
 public class OrderController {
     private final OrderService service;
 
     @GetMapping("/port")
     public String getPort(@Value("${local.server.port}") final String port) {
+        OrderController.log.info(String.format("Requisição respondida pela instância executando na porta %s", port));
         return String.format("Requisição respondida pela instância executando na porta %s", port);
     }
 

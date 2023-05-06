@@ -4,6 +4,7 @@ import br.com.alurafood.payments.dto.PaymentDto;
 import br.com.alurafood.payments.service.PaymentService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -71,5 +72,10 @@ public class PaymentController {
     @SuppressWarnings("unused")
     private void authorizedPaymentPendingIntegration(final Long id, final Exception e) {
         this.service.authorizedPaymentPendingIntegration(id);
+    }
+
+    @GetMapping("/port")
+    public String getPort(@Value("${local.server.port}") final String port) {
+        return String.format("Requisição respondida pela instância executando na porta %s", port);
     }
 }

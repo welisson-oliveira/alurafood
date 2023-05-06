@@ -42,7 +42,7 @@ logging:
     org.hibernate: debug
 # Server configuration
 server:
-  port: 0 #set your port
+  port: 8080 #set your port
 
 eureka:
   client:
